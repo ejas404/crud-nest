@@ -19,6 +19,10 @@ export class User {
 
     @Prop({default : 'User'})
     role : Roles;
+
+    @Prop({default : false})
+    isBlocked : boolean;
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)
