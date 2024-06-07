@@ -4,6 +4,7 @@ import { CreateUserDto } from 'src/user/dto/user.dto';
 import { User } from 'src/user/schemas/user.schema';
 import { UserService } from 'src/user/user.service';
 import { createUserResponse } from 'src/user/utils/create.response';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,7 @@ export class AuthService {
         private jwtService: JwtService
     ) { }
 
-    async login(data: User): Promise<{ userDto: CreateUserDto, access_token: string }> {
+    async login(data: LoginDto): Promise<{ userDto: CreateUserDto, access_token: string }> {
         const user = await this.userService.findUser(data.email);
         if (!user) throw new BadRequestException("No user existing");
         if (user.password !== data.password) throw new UnauthorizedException("Invalid email or password");
