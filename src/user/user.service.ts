@@ -19,18 +19,25 @@ export class UserService{
     }
 
     async blockUser(id : string){
-        const user = this.userModel.findById(id);
+        const user = await this.userModel.findById(id);
         if(!user) throw new BadRequestException("Invalid user id");
-        (await user).isBlocked = true;
-        (await user).save()
+        user.isBlocked = true;
+        await user.save()
         return true;
     }
 
     async unBlockUser(id : string){
-        const user = this.userModel.findById(id);
+        const user = await this.userModel.findById(id);
         if(!user) throw new BadRequestException("Invalid user id");
-        (await user).isBlocked = false;
-        (await user).save()
+        user.isBlocked = false;
+        await user.save()
+        return true;
+    }
+
+    async deleteUser(id : string){
+        const user = await this.userModel.findById(id);
+        if(!user) throw new BadRequestException("Invalid user id");
+        await user.deleteOne()
         return true;
     }
 }

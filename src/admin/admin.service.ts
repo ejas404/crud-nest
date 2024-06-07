@@ -19,4 +19,11 @@ export class AdminService {
             return { success: true }
         }
     }
+
+    async deleteUser(id : string){
+        const res = await this.userService.deleteUser(id)
+        if (res) {
+            return { success: true }
+        }
+    }
 }
