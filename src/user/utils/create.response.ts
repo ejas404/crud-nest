@@ -1,8 +1,9 @@
 import { CreateUserDto } from "../dto/user.dto"
-import { User } from "../schemas/user.schema"
+import { User, UserDocument } from "../schemas/user.schema"
 
-export const createUserResponse = (user : User) : CreateUserDto => {
+export const createUserResponse = (user : UserDocument) : CreateUserDto => {
     const userDto = new CreateUserDto();
+    userDto._id = user._id.toString() 
     userDto.name = user.name;
     userDto.email = user.email;
     userDto.role = user.role;
