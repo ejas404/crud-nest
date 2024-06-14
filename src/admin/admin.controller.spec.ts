@@ -1,56 +1,90 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { UserModule } from '../../src/user/user.module';
+import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from '../../src/auth/guards/auth.guard';
 
 
 describe('AdminController', () => {
   let adminController: AdminController;
-  let adminService: AdminService;
+
+  const mockAdminService = {
+    blockUser: jest.fn(),
+    unBlockUser: jest.fn(),
+    deleteUser: jest.fn()
+  }
+
+
+  //user's mock id that pass through the params.
+  const user_id = "1";
+
+  //success response after operation.
+  const response = { success: true };
 
   beforeEach(async () => {
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AdminController],
-      imports : [],
+      imports: [],
       providers: [
         {
           provide: AdminService,
+          useValue: mockAdminService
+        },
+        {
+          provide: JwtService,
           useValue: {
-
-            blockUser: jest.fn(),
-            unBlockUser: jest.fn(),
-            deleteUser: jest.fn(),
-          }
-        }
+            verifyAsync: jest.fn().mockResolvedValue({ userId: 1 }), // Mocking verifyAsync method
+          },
+        },
+        AuthGuard,
       ],
-    }).compile();
+    }).overrideGuard(AuthGuard)
+      .useValue({
+        canActivate: jest.fn().mockResolvedValue(true),
+      })
+      .compile();
 
     adminController = module.get<AdminController>(AdminController);
-    adminService = module.get<AdminService>(AdminService);
+
   });
 
-  describe('blockUser', () => {
-    it('should call blockUser method of AdminService with correct id', async () => {
-      const id = '1';
-      await adminController.blockUser(id);
-      expect(adminService.blockUser).toHaveBeenCalledWith(id);
-    });
+  it('should be defined', () => {
+    expect(adminController).toBeDefined()
+  })
+
+
+  it('blockUser', async () => {
+    
+    jest.spyOn(mockAdminService,'blockUser').mockReturnValue(response)
+    const result = await adminController.blockUser(user_id);
+
+    expect(mockAdminService.blockUser).toHaveBeenCalled();
+    expect(mockAdminService.blockUser).toHaveBeenCalledWith(user_id);
+    expect(result).toEqual(response);
+
   });
 
-  describe('unBlockUser', () => {
-    it('should call unBlockUser method of AdminService with correct id', async () => {
-      const id = '1';
-      await adminController.unBlockUser(id);
-      expect(adminService.unBlockUser).toHaveBeenCalledWith(id);
-    });
+  it('unBlockUser', async () => {
+
+    jest.spyOn(mockAdminService,'unBlockUser').mockReturnValue(response)
+    const result = await adminController.unBlockUser(user_id);
+
+    expect(mockAdminService.unBlockUser).toHaveBeenCalled();
+    expect(mockAdminService.unBlockUser).toHaveBeenCalledWith(user_id);
+    expect(result).toEqual(response);
   });
 
-  describe('deleteUser', () => {
-    it('should call deleteUser method of AdminService with correct id', async () => {
-      const id = '1';
-      await adminController.deleteUser(id);
-      expect(adminService.deleteUser).toHaveBeenCalledWith(id);
-    });
+  it('deleteUser', async () => {
+
+    jest.spyOn(mockAdminService,'deleteUser').mockReturnValue(response)
+    const result = await adminController.deleteUser(user_id);
+
+    expect(mockAdminService.deleteUser).toHaveBeenCalled();
+    expect(mockAdminService.deleteUser).toHaveBeenCalledWith(user_id);
+    expect(result).toEqual(response);
+
   });
+
+
 });

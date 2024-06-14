@@ -4,7 +4,6 @@ import { UserService } from '../../src/user/user.service';
 
 describe('AdminService', () => {
   let service: AdminService;
-  let userService : UserService;
 
   const mockUserService = {
     blockUser : jest.fn(),
@@ -14,6 +13,7 @@ describe('AdminService', () => {
 
   //user's mock id that pass through the params.
   const user_id = "1";
+  
   //success response after operation.
   const response = { success: true };
 
@@ -28,7 +28,6 @@ describe('AdminService', () => {
     }).compile();
 
     service = module.get<AdminService>(AdminService);
-    userService = module.get<UserService>(UserService)
   });
 
   it('should be defined', () => {
@@ -41,8 +40,8 @@ describe('AdminService', () => {
     jest.spyOn(mockUserService,'blockUser').mockReturnValue(response)
     const result = await service.blockUser(user_id)
 
-    expect(userService.blockUser).toHaveBeenCalled();
-    expect(userService.blockUser).toHaveBeenCalledWith(user_id)
+    expect(mockUserService.blockUser).toHaveBeenCalled();
+    expect(mockUserService.blockUser).toHaveBeenCalledWith(user_id)
 
     expect(result).toEqual(response)
   })
@@ -52,8 +51,8 @@ describe('AdminService', () => {
     jest.spyOn(mockUserService,'unBlockUser').mockReturnValue(response)
     const result = await service.unBlockUser(user_id)
 
-    expect(userService.unBlockUser).toHaveBeenCalled();
-    expect(userService.unBlockUser).toHaveBeenCalledWith(user_id)
+    expect(mockUserService.unBlockUser).toHaveBeenCalled();
+    expect(mockUserService.unBlockUser).toHaveBeenCalledWith(user_id)
 
     expect(result).toEqual(response)
   })
@@ -63,8 +62,8 @@ describe('AdminService', () => {
     jest.spyOn(mockUserService,'unBlockUser').mockReturnValue(response)
     const result = await service.unBlockUser(user_id)
 
-    expect(userService.unBlockUser).toHaveBeenCalled();
-    expect(userService.unBlockUser).toHaveBeenCalledWith(user_id)
+    expect(mockUserService.unBlockUser).toHaveBeenCalled();
+    expect(mockUserService.unBlockUser).toHaveBeenCalledWith(user_id)
 
     expect(result).toEqual(response)
   })
