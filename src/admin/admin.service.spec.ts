@@ -12,6 +12,11 @@ describe('AdminService', () => {
     deleteUser : jest.fn()
   }
 
+  //user's mock id that pass through the params.
+  const user_id = "1";
+  //success response after operation.
+  const response = { success: true };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [AdminService ,
@@ -31,20 +36,37 @@ describe('AdminService', () => {
   });
 
 
-  it('blockUser should block a user and return success response', async ()=>{
-
-    const id = "1"
-    const response = { success: true };
+  it('blockUser', async ()=>{
 
     jest.spyOn(mockUserService,'blockUser').mockReturnValue(response)
-    const result = await service.blockUser(id)
+    const result = await service.blockUser(user_id)
 
     expect(userService.blockUser).toHaveBeenCalled();
-    expect(userService.blockUser).toHaveBeenCalledWith(id)
+    expect(userService.blockUser).toHaveBeenCalledWith(user_id)
 
     expect(result).toEqual(response)
   })
-  it('unBlockUser', ()=>{})
-  it('deleteUser', ()=>{})
+
+  it('unBlockUser', async ()=>{
+
+    jest.spyOn(mockUserService,'unBlockUser').mockReturnValue(response)
+    const result = await service.unBlockUser(user_id)
+
+    expect(userService.unBlockUser).toHaveBeenCalled();
+    expect(userService.unBlockUser).toHaveBeenCalledWith(user_id)
+
+    expect(result).toEqual(response)
+  })
+
+  it('deleteUser', async ()=>{
+
+    jest.spyOn(mockUserService,'unBlockUser').mockReturnValue(response)
+    const result = await service.unBlockUser(user_id)
+
+    expect(userService.unBlockUser).toHaveBeenCalled();
+    expect(userService.unBlockUser).toHaveBeenCalledWith(user_id)
+
+    expect(result).toEqual(response)
+  })
 
 });
